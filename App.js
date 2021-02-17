@@ -7,6 +7,8 @@ import Carousel from "./components/Carousel";
 import * as ScreenOrientation from "expo-screen-orientation";
 ScreenOrientation.unlockAsync();
 
+// To Do add orientation listener
+
 export default function App() {
   const initialSlideList = [];
   const [slideList, setSlideList] = useState(initialSlideList);

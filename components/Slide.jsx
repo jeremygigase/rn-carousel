@@ -1,13 +1,27 @@
 //Packages
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 import ImageZoom from "react-native-image-pan-zoom";
 
-const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+//FIX ME: sometimes a memory leak and a scrolling issue when changing orientation
+//Problem in Carousel and Slide...
+
 const Slide = memo(function Slide({ data }) {
-  console.log(data);
+  const [windowWidth, setWindowWidth] = useState(
+    Dimensions.get("window").width
+  );
+
+  const [windowHeight, setWindowHeight] = useState(
+    Dimensions.get("window").height
+  );
+
+  Dimensions.addEventListener("change", () => {
+    setWindowHeight(Dimensions.get("window").height);
+    setWindowWidth(Dimensions.get("window").width);
+  });
+
   return (
-    <View style={styles.slide}>
+    <View style={{ ...styles.slide, height: windowHeight, width: windowWidth }}>
       <ImageZoom
         cropWidth={windowWidth}
         cropHeight={windowHeight * 0.8}
@@ -27,8 +41,6 @@ export default Slide;
 
 const styles = StyleSheet.create({
   slide: {
-    height: windowHeight,
-    width: windowWidth,
     justifyContent: "center",
     alignItems: "center",
   },

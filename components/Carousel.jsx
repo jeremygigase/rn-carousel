@@ -1,13 +1,25 @@
 // Packages
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { StyleSheet, Dimensions, FlatList } from "react-native";
 
 // Components
 import Slide from "./Slide";
 import Pagination from "./Pagination";
 
+//FIX ME: sometimes a memory leak and a scrolling issue when changing orientation
+//Problem in Carousel and Slide...
+
 function Carousel({ slideList }) {
-  const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+  const [windowWidth, setWindowWidth] = useState(
+    Dimensions.get("window").width
+  );
+
+  Dimensions.addEventListener("change", () => {
+    setWindowWidth(Dimensions.get("window").width);
+  });
+
+  //console.log(windowWidth);
+
   const [index, setIndex] = useState(0);
   const indexRef = useRef(index);
   indexRef.current = index;
@@ -30,7 +42,7 @@ function Carousel({ slideList }) {
 
   const flatListOptimizationProps = {
     initialNumToRender: 0,
-    maxToRenderPerBatch: 1,
+    maxToRenderPerBatch: 2,
     removeClippedSubviews: true,
     scrollEventThrottle: 16,
     windowSize: 2,
